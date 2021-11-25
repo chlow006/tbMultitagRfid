@@ -1,0 +1,12 @@
+﻿  RfidModbusProject1.cpp
+c:\users\changhong.low\source\repos\rfidmodbusproject1\rfidmodbusproject1\rfidmodbusproject1.cpp(10): warning C4101: 'mb2': unreferenced local variable
+     Creating library C:\Users\changhong.low\source\repos\RfidModbusProject1\Debug\RfidModbusProject1.lib and object C:\Users\changhong.low\source\repos\RfidModbusProject1\Debug\RfidModbusProject1.exp
+modbus-rtu.obj : warning LNK4217: locally defined symbol _modbus_free imported in function _modbus_new_rtu
+modbus-tcp.obj : warning LNK4217: locally defined symbol _modbus_free imported in function __connect
+RfidModbusProject1.obj : warning LNK4049: locally defined symbol _modbus_free imported
+modbus.obj : warning LNK4217: locally defined symbol _modbus_set_bits_from_bytes imported in function _modbus_reply
+RfidModbusProject1.obj : warning LNK4217: locally defined symbol _modbus_connect imported in function _main
+RfidModbusProject1.obj : warning LNK4217: locally defined symbol _modbus_close imported in function _main
+RfidModbusProject1.obj : warning LNK4217: locally defined symbol _modbus_read_registers imported in function _main
+RfidModbusProject1.obj : warning LNK4217: locally defined symbol _modbus_new_tcp imported in function _main
+  RfidModbusProject1.vcxproj -> C:\Users\changhong.low\source\repos\RfidModbusProject1\Debug\RfidModbusProject1.exe
