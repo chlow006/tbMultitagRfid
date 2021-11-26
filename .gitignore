@@ -2,6 +2,6 @@
 
 # ignore all debugs
 .vs
-\Debug
+Debug
 *\Debug
 

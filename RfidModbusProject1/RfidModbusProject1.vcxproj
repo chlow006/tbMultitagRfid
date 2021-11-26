@@ -161,6 +161,7 @@
     <ClCompile Include="libmodbus\modbus-tcp.c" />
     <ClCompile Include="libmodbus\modbus.c" />
     <ClCompile Include="RfidModbusProject1.cpp" />
+    <ClCompile Include="RfidTben.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="libmodbus\config.h" />
@@ -171,6 +172,7 @@
     <ClInclude Include="libmodbus\modbus-tcp.h" />
     <ClInclude Include="libmodbus\modbus-version.h" />
     <ClInclude Include="libmodbus\modbus.h" />
+    <ClInclude Include="RfidTben.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="modbus.rc" />
