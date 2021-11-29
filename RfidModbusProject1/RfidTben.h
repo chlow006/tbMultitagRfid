@@ -30,13 +30,11 @@ class RfidTben
 	uint16_t wdStartAddress;
 	uint16_t wLEN;
 	uint16_t wCmdTimeOut;
-
-
-	uint16_t wByteAvailable;
-	string asRFID[30];
-
+	
 public:
 
+	uint16_t wByteAvailable;
+	string asRFID[50];
 	uint16_t wTagCounter;
 	uint16_t awRFID_input[300];
 	typedef enum  {
