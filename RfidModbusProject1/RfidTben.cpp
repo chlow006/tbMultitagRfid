@@ -65,10 +65,10 @@ int RfidTben::Rfid_changeByteLength(uint16_t len, ModbusAddress MBaddr) {
 	return writeModbus(MBaddr, len);
 }
 
-
-int RfidTben::Rfid_readTagInput(uint16_t len, ModbusAddress MBaddr) {
+int RfidTben::Rfid_readTagInput(uint16_t len, ModbusAddress MBaddr, int iteration) {
 	int rc = 0;
-	rc = modbus_read_registers(modbusHandler, MBaddr, len, awRFID_input);
+	int arrayOffset = (128/2)*iteration; //offset by max number of WORD per read
+	rc = modbus_read_registers(modbusHandler, MBaddr, len, awRFID_input+arrayOffset);
 	if (rc == -1) {
 		fprintf(stderr, "read failed: %s\n", modbus_strerror(errno));
 		return -1;
@@ -102,6 +102,8 @@ int RfidTben::Rfid_scanTag(int channel, int timeout) {
 	//step 4: Stop polling in continuous mode
 	//step 5: Retrieve data
 
+	int loopCount = 0;
+
 	switch (channel)
 	{
 	case 0:
@@ -117,56 +119,31 @@ int RfidTben::Rfid_scanTag(int channel, int timeout) {
 		std::this_thread::sleep_for(50ms);
 		Rfid_readByteAvailable(ch0_byteAvailable);
 		std::this_thread::sleep_for(50ms);
+		
 		while (wByteAvailable > 128) {
 			Rfid_changeByteLength(128, ch0_length);
 			Rfid_changeMode(GetData, ch0_commandCode);
-			std::this_thread::sleep_for(50ms);
-			Rfid_readTagInput(64, ch0_inputTag);
-			std::this_thread::sleep_for(50ms);
+			std::this_thread::sleep_for(200ms);
+			Rfid_readTagInput(64, ch0_inputTag,loopCount);
+			std::this_thread::sleep_for(200ms);
 			Rfid_changeMode(Idle, ch0_commandCode);
-			std::this_thread::sleep_for(50ms);
-			Rfid_readByteAvailable(ch0_byteAvailable);
+			std::this_thread::sleep_for(200ms);
+			Rfid_readByteAvailable(ch0_byteAvailable); //update byte available and still unread
+			loopCount++;
 		}
 		Rfid_changeByteLength(wByteAvailable, ch0_length);
 		Rfid_changeMode(GetData, ch0_commandCode);
 		std::this_thread::sleep_for(100ms);
-		return Rfid_readTagInput(wByteAvailable / 2, ch0_inputTag);
+		return Rfid_readTagInput(wByteAvailable / 2, ch0_inputTag, loopCount);
 		break;
 	case 1:
-		Rfid_changeMode(Idle, ch1_commandCode);
-		std::this_thread::sleep_for(50ms);
-		Rfid_changeStartAddr((uint16_t)1, ch1_startAddr);
-		std::this_thread::sleep_for(50ms);
-		Rfid_changeByteLength((uint16_t)16, ch1_length);
-		std::this_thread::sleep_for(50ms);
-		Rfid_changeMode(StartContinousMode, ch1_commandCode);
-		std::this_thread::sleep_for(std::chrono::milliseconds(timeout));
-		Rfid_changeMode(StopContinousMode, ch1_commandCode);
-		std::this_thread::sleep_for(50ms);
-		Rfid_readByteAvailable(ch1_byteAvailable);
-		std::this_thread::sleep_for(50ms);
-		while (wByteAvailable > 128) {
-			Rfid_changeByteLength(128, ch1_length);
-			Rfid_changeMode(GetData, ch1_commandCode);
-			std::this_thread::sleep_for(50ms);
-			Rfid_readTagInput(64, ch1_inputTag);
-			std::this_thread::sleep_for(50ms);
-			Rfid_changeMode(Idle, ch1_commandCode);
-			std::this_thread::sleep_for(50ms);
-			Rfid_readByteAvailable(ch0_byteAvailable);
-		}
-		Rfid_changeByteLength(wByteAvailable, ch1_length);
-		Rfid_changeMode(GetData, ch1_commandCode);
-		std::this_thread::sleep_for(100ms);
-		return Rfid_readTagInput(wByteAvailable / 2, ch1_inputTag);
+		
 		break;
 	default:
 		printf("non-existent channel selected. Please choose again\n");
 		return 0;
 
 	}
-	
-
 }
 
 string RfidTben::wordToAscii(uint16_t wordSrc) {
@@ -212,7 +189,9 @@ int RfidTben::Rfid_parseTagDetected(int channel) {
 			int index = 8*i + 1 + j ;
 			str+=wordToAscii(awRFID_input[index]);
 		}
-		printf("%i: %s\n",i, str.c_str());
+		asRFID[i] = str;
+		printf("string %i: %s\n", i, asRFID[i].c_str());
+		
 	}
 	return 0;
 }

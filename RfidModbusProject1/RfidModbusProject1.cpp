@@ -12,8 +12,7 @@ int main()
 	RfidTben mock1;
 	mock1.connectModbus("192.168.1.13");
 	
-	int rc = mock1.Rfid_scanTag(0,2000);
-
+	int rc = mock1.Rfid_scanTag(0,3000);
 	/*for (int i = 0; i < rc; i++) {
 		printf("read %d registers reg[%d]=%d (0x%X)\n", rc, i, mock1.awRFID_input[i], mock1.awRFID_input[i]);
 	}*/

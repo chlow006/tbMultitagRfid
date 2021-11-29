@@ -19,6 +19,8 @@ extern "C" {
 using namespace std::chrono_literals;
 using std::string;
 
+#define TAG_LENGTH 16
+
 class RfidTben
 {
 	modbus_t * modbusHandler;
@@ -31,13 +33,12 @@ class RfidTben
 
 
 	uint16_t wByteAvailable;
-	uint8_t abRFID_input[128];
-	string asRFID[10];
+	string asRFID[30];
 
 public:
 
 	uint16_t wTagCounter;
-	uint16_t awRFID_input[64];
+	uint16_t awRFID_input[300];
 	typedef enum  {
 		Idle = 0x0000,
 		Inventory = 0x0001,
@@ -89,7 +90,7 @@ public:
 	int Rfid_changeStartAddr(uint32_t addr, ModbusAddress MBaddr);
 	int Rfid_changeByteLength(uint16_t len, ModbusAddress MBaddr);
 
-	int Rfid_readTagInput(uint16_t len, ModbusAddress MBaddr);
+	int Rfid_readTagInput(uint16_t len, ModbusAddress MBaddr, int iteration);
 	int Rfid_readTagCounter(ModbusAddress MBaddr);
 	uint16_t Rfid_readByteAvailable(ModbusAddress MBaddr);
 
