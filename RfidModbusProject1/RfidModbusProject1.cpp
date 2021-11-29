@@ -11,14 +11,13 @@ int main()
 {
 	RfidTben mock1;
 	mock1.connectModbus("192.168.1.13");
-	int tc = mock1.Rfid_readTagCounter();	
-	printf("read %d tags\n", tc);
+	
+	int rc = mock1.Rfid_scanTag(0,2000);
 
-	int rc = mock1.Rfid_scanTag();
 	/*for (int i = 0; i < rc; i++) {
 		printf("read %d registers reg[%d]=%d (0x%X)\n", rc, i, mock1.awRFID_input[i], mock1.awRFID_input[i]);
 	}*/
-	mock1.Rfid_parseTagDetected();
-
+	mock1.Rfid_parseTagDetected(0);
+	printf("read %d tags\n", mock1.wTagCounter);
 	
 }
