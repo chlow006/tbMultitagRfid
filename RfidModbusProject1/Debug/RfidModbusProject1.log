@@ -1,5 +1,2 @@
 ﻿  RfidModbusProject1.cpp
-  RfidTben.cpp
-  Generating Code...
-c:\users\changhong.low\source\repos\rfidmodbusproject1\rfidmodbusproject1\rfidtben.cpp(147): warning C4715: 'RfidTben::Rfid_scanTag': not all control paths return a value
   RfidModbusProject1.vcxproj -> C:\Users\changhong.low\source\repos\RfidModbusProject1\Debug\RfidModbusProject1.exe
