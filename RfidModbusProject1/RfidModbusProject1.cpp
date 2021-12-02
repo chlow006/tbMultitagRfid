@@ -10,17 +10,8 @@ int display_options();
 
 int main()
 {
-	/*RfidTben mock1;
-	mock1.connectModbus("192.168.1.13");
-	
-	int rc = mock1.Rfid_scanTag(0,3000);
-	/*for (int i = 0; i < rc; i++) {
-		printf("read %d registers reg[%d]=%d (0x%X)\n", rc, i, mock1.awRFID_input[i], mock1.awRFID_input[i]);
-	}*/
-	/*mock1.Rfid_parseTagDetected(0);
-	printf("read %d tags\n", mock1.wTagCounter);*/
-	
 	RfidTben mock2;
+	int ch = 0;
 
 	std::cout<<"This is sample test program for TBEN_S2_2RFID_4DXP\n";
 	std::cout <<"Connecting via modbus to TBEN_S2_2RFID_4DXP\n";
@@ -29,10 +20,16 @@ int main()
 	}
 	else {
 		std::cout << "Connected.\n";
-		int ch = 0;
-		std::cout << "What's the channel connected to rfid reader?\n";
-		std::cin >> ch;
 		
+		do
+		{
+			std::cout << "What's the channel connected to rfid reader?\n";
+			if (!(std::cin >> ch)) {//error occurred
+				std::cout << "invalid input" << std::endl;
+				std::cin.clear();//Clear the error
+				std::cin.ignore(); //discard input
+			}
+		} while (ch != 0 && ch != 1);
 		RfidTben::ModbusAddress chX_commandCode;
 		RfidTben::ModbusAddress chX_startAddr;
 		RfidTben::ModbusAddress chX_length;
@@ -40,7 +37,7 @@ int main()
 		RfidTben::ModbusAddress chX_byteAvailable;
 		RfidTben::ModbusAddress chX_inputTag;
 
-		if (ch = '0') {
+		if (ch == 0) {
 			chX_commandCode = RfidTben::ch0_commandCode;
 			chX_startAddr = RfidTben::ch0_startAddr;
 			chX_length = RfidTben::ch0_length;
@@ -56,13 +53,12 @@ int main()
 			chX_byteAvailable = RfidTben::ch1_byteAvailable;
 			chX_inputTag = RfidTben::ch1_inputTag;
 		}
-		std::cout << chX_commandCode << "\n";
-		std::cout << chX_length << "\n";
 
 		while (true) {
 			int option = display_options();
 			int loopCount = 0;
 			char input2 = '0';
+			uint16_t * intptr = mock2.awRFID_input;
 			switch (option) {
 				case 1:
 					mock2.Rfid_changeMode(RfidTben::Idle, chX_commandCode);
@@ -83,33 +79,19 @@ int main()
 					mock2.Rfid_changeMode(RfidTben::StopContinousMode, chX_commandCode);
 					break;
 				case 3:
-					mock2.Rfid_readByteAvailable(chX_byteAvailable);
-					std::this_thread::sleep_for(50ms);
-					loopCount = 0;
-					if (mock2.wByteAvailable==0) {
-						continue;
-					}
-					while (mock2.wByteAvailable > 128) {
-						mock2.Rfid_changeByteLength(128, chX_length);
-						mock2.Rfid_changeMode(mock2.GetData, chX_commandCode);
-						std::this_thread::sleep_for(200ms);
-						mock2.Rfid_readTagInput(64, chX_inputTag, loopCount);
-						std::this_thread::sleep_for(200ms);
-						mock2.Rfid_changeMode(RfidTben::Idle, chX_commandCode);
-						std::this_thread::sleep_for(200ms);
-						mock2.Rfid_readByteAvailable(chX_byteAvailable); //update byte available and still unread
-						loopCount++;
-					}
-					mock2.Rfid_changeByteLength(mock2.wByteAvailable, chX_length);
-					mock2.Rfid_changeMode(RfidTben::GetData, chX_commandCode);
-					std::this_thread::sleep_for(100ms);
-					mock2.Rfid_readTagInput(mock2.wByteAvailable / 2, chX_inputTag, loopCount);
-					mock2.Rfid_parseTagDetected(0);
+					mock2.Rfid_readTag(ch);
+					mock2.Rfid_parseTagDetected(ch);
 					std::cout << "\n";
 					break;
+				case 4:
+					printf("awRFID_input: %d  %d %d %d %d %d %d %d %d %d\n",
+						intptr[0], intptr[1], intptr[2], intptr[3],
+						intptr[4], intptr[5], intptr[6], intptr[7],
+						intptr[8], intptr[9]);
+					break;
 				case 7:
-					mock2.Rfid_scanTag(0, 3000);
-					mock2.Rfid_parseTagDetected(0);
+					mock2.Rfid_scanTag(ch, 3000);
+					mock2.Rfid_parseTagDetected(ch);
 					break;
 				case 8:
 					mock2.Rfid_changeMode(RfidTben::Reset, chX_commandCode);
@@ -130,14 +112,19 @@ int display_options() {
 	std::cout << "1: idle\n";
 	std::cout << "2: scan with continuous mode\n";
 	std::cout << "3: read and parse tags\n";
+	std::cout << "4: print awRFID_input\n";
 	std::cout << "7: scan for 3 seconds and parse\n";
 	std::cout << "8: reset\n";
 	std::cout << "9: END PROGRAM\n";
 	std::cout << "Please choose your options....>   ";
-	std::cin >> input;
-	if (input < 1 || input>9) {
-		input = 1;
-		std::cout << "Please choose an appropriate number   ";
-	}
+	do
+	{
+		if (!(std::cin >> input)) {//error occurred
+			std::cout << "invalid input" << std::endl;
+			std::cin.clear();//Clear the error
+			std::cin.ignore(); //discard input
+		}
+	} while (input < 1 || input>9);
+
 	return (int)input;
 }

@@ -19,7 +19,8 @@ extern "C" {
 using namespace std::chrono_literals;
 using std::string;
 
-#define TAG_LENGTH 16
+#define EXPECTED_BYTE_LENGTH 16
+#define EXPECTED_EPC_LENGTH 12
 
 class RfidTben
 {
@@ -37,6 +38,7 @@ public:
 	string asRFID[50];
 	uint16_t wTagCounter;
 	uint16_t awRFID_input[300];
+	uint16_t awRFID_output[30];
 	typedef enum  {
 		Idle = 0x0000,
 		Inventory = 0x0001,
@@ -45,17 +47,20 @@ public:
 		StartContinousMode = 0x0010,
 		StopContinousMode = 0x0012,
 		GetData = 0x0011,
+		ChangeEPCLength = 0x0007,
 		Reset = 0x8000
 	}RfidCommand;
 	
 	#define TBEN_S2_2RFID_4DXP
 	#ifdef TBEN_S2_2RFID_4DXP
+
 	typedef enum {
 		ch0_commandCode = 0x800,
 		ch0_memoryArea = 0x801,
 		ch0_startAddr = 0x802,
 		ch0_length = 0x804,
 		ch0_EPClength = 0x805,
+		ch0_inputData = 0x80c,
 
 		ch0_tagCounter = 0x05,
 		ch0_byteAvailable = 0x06,
@@ -77,6 +82,8 @@ public:
 		ch1_tagPresent = 0x57,
 		ch1_inputTag = 0x58,
 	}ModbusAddress;
+
+
 	#endif
 
 	int  connectModbus(modbus_t * mb, const char * ipAddress);
@@ -87,13 +94,17 @@ public:
 	int Rfid_changeStartAddr(uint16_t addr, ModbusAddress MBaddr);
 	int Rfid_changeStartAddr(uint32_t addr, ModbusAddress MBaddr);
 	int Rfid_changeByteLength(uint16_t len, ModbusAddress MBaddr);
+	int Rfid_changeOutputData(int len, ModbusAddress MBaddr);
 
 	int Rfid_readTagInput(uint16_t len, ModbusAddress MBaddr, int iteration);
 	int Rfid_readTagCounter(ModbusAddress MBaddr);
 	uint16_t Rfid_readByteAvailable(ModbusAddress MBaddr);
 
-	int Rfid_scanTag(int channel,int timeout);  //detects number of tags, stores the epc information into the in
+	int Rfid_scanTag(int channel, int timeout);  //detects number of tags, stores the epc information
+	int Rfid_readTag(int channel);  //reads buffer stores the epc information
+	string convertExtendedAscii(uint8_t hex);
 	string wordToAscii(uint16_t wordSrc);
+	string wordToByteString(uint16_t wordSrc);
 	int Rfid_parseTagDetected(int channel);
 
 	void disconnectModbus();
