@@ -58,6 +58,8 @@ int main()
 			int option = display_options();
 			int loopCount = 0;
 			char input2 = '0';
+			uint8_t epcChange[16] = { 0x4c,0x51,0x31,0x34,0x78,0x31,0x34,0x4f,
+								0x4e,0x4c,0x30,0x30,0x30,0x30,0x30,0x32};
 			uint16_t * intptr = mock2.awRFID_input;
 			switch (option) {
 				case 1:
@@ -84,6 +86,9 @@ int main()
 					std::cout << "\n";
 					break;
 				case 4:
+					mock2.Rfid_changeEPCLength(&mock2.awRFID_input[1], &epcChange[0], 6, 8, 0);
+					break;
+				case 5:
 					printf("awRFID_input: %d  %d %d %d %d %d %d %d %d %d\n",
 						intptr[0], intptr[1], intptr[2], intptr[3],
 						intptr[4], intptr[5], intptr[6], intptr[7],
@@ -107,7 +112,7 @@ int main()
 }
 
 int display_options() {
-	int input=1;
+	int input = 1;
 	std::cout << "Please choose your options\n";
 	std::cout << "1: idle\n";
 	std::cout << "2: scan with continuous mode\n";

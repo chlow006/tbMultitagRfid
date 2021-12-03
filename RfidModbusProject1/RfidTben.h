@@ -8,6 +8,7 @@ Ver1: Initial commit by Low Chang Hong (29 Nov 2021)
 //including <Windows.h> leads to compile error. Please use Sleep() outside of class - 26nov2021
 #include <chrono>
 #include <thread>
+#include <iostream>
 #include <stdio.h>
 #include <cstdint>
 #include <string>
@@ -19,8 +20,8 @@ extern "C" {
 using namespace std::chrono_literals;
 using std::string;
 
-#define EXPECTED_BYTE_LENGTH 16
-#define EXPECTED_EPC_LENGTH 12
+#define EXPECTED_BYTE_LENGTH (EXPECTED_EPC_LENGTH + 4)
+#define EXPECTED_EPC_LENGTH 16
 
 class RfidTben
 {
@@ -74,6 +75,7 @@ public:
 		ch1_startAddr = 0x84e,
 		ch1_length = 0x850,
 		ch1_EPClength = 0x851,
+		ch1_inputData = 0x0858,
 
 		ch1_tagCounter = 0x51,
 		ch1_byteAvailable = 0x52,
@@ -94,8 +96,9 @@ public:
 	int Rfid_changeStartAddr(uint16_t addr, ModbusAddress MBaddr);
 	int Rfid_changeStartAddr(uint32_t addr, ModbusAddress MBaddr);
 	int Rfid_changeByteLength(uint16_t len, ModbusAddress MBaddr);
-	int Rfid_changeOutputData(int len, ModbusAddress MBaddr);
+	int Rfid_changeOutputData(int wordLen, ModbusAddress MBaddr);
 
+	int Rfid_changeEPCLength(uint16_t * oldepc, uint8_t * newepc, int old_wordLen, uint16_t new_wordLen, int channel);
 	int Rfid_readTagInput(uint16_t len, ModbusAddress MBaddr, int iteration);
 	int Rfid_readTagCounter(ModbusAddress MBaddr);
 	uint16_t Rfid_readByteAvailable(ModbusAddress MBaddr);
