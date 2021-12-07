@@ -49,9 +49,13 @@ int RfidTben::Rfid_changeMode(RfidCommand command, ModbusAddress MBaddr) {
 }
 
 int RfidTben::Rfid_changeStartAddr(uint16_t addr, ModbusAddress MBaddr) {
-
 	return writeModbus(MBaddr, addr);
 }
+
+int RfidTben::Rfid_changeMemoryArea(RfidMemoryArea area, ModbusAddress MBaddr) {
+
+	return writeModbus(MBaddr, (area<<8));
+}	
 
 int RfidTben::Rfid_changeStartAddr(uint32_t addr, ModbusAddress MBaddr) { //to be tested
 	int wc;
@@ -64,6 +68,10 @@ int RfidTben::Rfid_changeStartAddr(uint32_t addr, ModbusAddress MBaddr) { //to b
 
 int RfidTben::Rfid_changeByteLength(uint16_t len, ModbusAddress MBaddr) {
 	return writeModbus(MBaddr, len);
+}
+
+int RfidTben::Rfid_changeEpcLength(uint16_t epclen, ModbusAddress MBaddr) {
+	return writeModbus(MBaddr, epclen);
 }
 
 int RfidTben::Rfid_changeOutputData(int wordLen, ModbusAddress MBaddr) {
@@ -86,38 +94,44 @@ int RfidTben::Rfid_changeEPCLength(uint16_t * oldepc, uint8_t * newepc, int old_
 	case 0:
 		Rfid_changeMode(Idle, ch0_commandCode);
 		std::this_thread::sleep_for(50ms);
-		Rfid_changeStartAddr((uint16_t)0, ch0_startAddr); 
+		Rfid_changeMemoryArea(EPC, ch0_memoryArea);
 		std::this_thread::sleep_for(50ms);
-		Rfid_changeByteLength((uint16_t)(new_wordLen) * 2, ch0_length);
+		Rfid_changeStartAddr((uint16_t)0, ch0_startAddr);
+		std::this_thread::sleep_for(50ms);
+		Rfid_changeByteLength((uint16_t)(new_wordLen) * 2, ch0_length); 
 		std::this_thread::sleep_for(50ms);
 		//copy bytes of old epc
 		memcpy(awRFID_output, oldepc, old_wordLen * 2);
-		//change 'Length of UID/EPC'
-		writeModbus(ch0_EPClength, old_wordLen * 2); 
+		//change 'Length of UID/EPC' 
+		Rfid_changeEpcLength(old_wordLen * 2, ch0_EPClength);
 		//copy new epc
 		memcpy(awRFID_output + (old_wordLen), newepc, (new_wordLen) * 2); //copy in bytes
-		Rfid_changeOutputData((old_wordLen + new_wordLen), ch0_inputData);
+		Rfid_changeOutputData((old_wordLen + new_wordLen), ch0_outputData);
 		std::this_thread::sleep_for(50ms);
 		Rfid_changeMode(ChangeEPCLength, ch0_commandCode);
 		std::this_thread::sleep_for(50ms);
+		printf("Please close and rerun the program before scanning for tags again\n");
 		return 0;
 	case 1:
 		Rfid_changeMode(Idle, ch1_commandCode);
 		std::this_thread::sleep_for(50ms);
-		Rfid_changeStartAddr((uint16_t)0, ch1_startAddr); 
+		Rfid_changeMemoryArea(EPC, ch1_memoryArea);
 		std::this_thread::sleep_for(50ms);
-		Rfid_changeByteLength((uint16_t)(new_wordLen) * 2, ch0_length);
+		Rfid_changeStartAddr((uint16_t)0, ch1_startAddr);
+		std::this_thread::sleep_for(50ms);
+		Rfid_changeByteLength((uint16_t)(new_wordLen) * 2, ch1_length);
 		std::this_thread::sleep_for(50ms);
 		//copy bytes of old epc
 		memcpy(awRFID_output, oldepc, old_wordLen * 2);
 		//change 'Length of UID/EPC'
-		writeModbus(ch1_EPClength, old_wordLen * 2); 
+		Rfid_changeEpcLength(old_wordLen * 2, ch1_EPClength);
 		//copy new epc
 		memcpy(awRFID_output + (old_wordLen), newepc, (new_wordLen) * 2); //copy in bytes
-		Rfid_changeOutputData((old_wordLen + new_wordLen), ch1_inputData);
+		Rfid_changeOutputData((old_wordLen + new_wordLen), ch1_outputData);
 		std::this_thread::sleep_for(50ms);
 		Rfid_changeMode(ChangeEPCLength, ch1_commandCode);
 		std::this_thread::sleep_for(50ms);
+		printf("Please close and rerun the program before scanning for tags again\n");
 		return 0;
 	default:
 		return -1;
@@ -125,10 +139,10 @@ int RfidTben::Rfid_changeEPCLength(uint16_t * oldepc, uint8_t * newepc, int old_
 }
 
 
-int RfidTben::Rfid_readTagInput(uint16_t len, ModbusAddress MBaddr, int iteration) {
+int RfidTben::Rfid_readTagInput(uint16_t wordLen, ModbusAddress MBaddr, int iteration) {
 	int rc = 0;
 	int arrayOffset = (128/2)*iteration; //offset by max number of WORD per read
-	rc = modbus_read_registers(modbusHandler, MBaddr, len, awRFID_input+arrayOffset);
+	rc = modbus_read_registers(modbusHandler, MBaddr, wordLen, awRFID_input+arrayOffset);
 	if (rc == -1) {
 		fprintf(stderr, "read failed: %s\n", modbus_strerror(errno));
 		return -1;
@@ -154,7 +168,7 @@ uint16_t RfidTben::Rfid_readByteAvailable(ModbusAddress MBaddr) {
 	return wByteAvailable;
 }
 
-int RfidTben::Rfid_scanTag(int channel, int timeout) {
+int RfidTben::Rfid_scanEPC(int channel, int timeout) {
 	//Flow chart: Continuous mode without interruption before reading data (TBEN-S2-2RFID-4DXP Manual page 270)
 	//step 1: Set group address to detect unique IDs(Leaving it at zero will cause hardware to keep polling old tags)
 	//step 2: Set length 
@@ -169,29 +183,33 @@ int RfidTben::Rfid_scanTag(int channel, int timeout) {
 	case 0:
 		Rfid_changeMode(Idle, ch0_commandCode);
 		std::this_thread::sleep_for(50ms);
-		Rfid_changeStartAddr((uint16_t)1, ch0_startAddr);
+		Rfid_changeMemoryArea(EPC, ch0_memoryArea);
 		std::this_thread::sleep_for(50ms);
-		Rfid_changeByteLength((uint16_t)16, ch0_length);
+		Rfid_changeStartAddr((uint16_t)1, ch0_startAddr); //enable grouping of EPC
+		std::this_thread::sleep_for(50ms);
+		Rfid_changeByteLength((uint16_t)16, ch0_length); //set to positive value
 		std::this_thread::sleep_for(50ms);
 		Rfid_changeMode(StartContinousMode, ch0_commandCode);
 		std::this_thread::sleep_for(std::chrono::milliseconds(timeout));
 		Rfid_changeMode(StopContinousMode, ch0_commandCode);
 		std::this_thread::sleep_for(50ms);
-		Rfid_readTag(0);
+		Rfid_readEPC(0);
 		return 0;
 		break;
 	case 1:
 		Rfid_changeMode(Idle, ch1_commandCode);
 		std::this_thread::sleep_for(50ms);
-		Rfid_changeStartAddr((uint16_t)1, ch1_startAddr);
+		Rfid_changeMemoryArea(EPC, ch1_memoryArea);
 		std::this_thread::sleep_for(50ms);
-		Rfid_changeByteLength((uint16_t)16, ch1_length);
+		Rfid_changeStartAddr((uint16_t)1, ch1_startAddr);//enable grouping of EPC
+		std::this_thread::sleep_for(50ms);
+		Rfid_changeByteLength((uint16_t)16, ch1_length);//set to positive value
 		std::this_thread::sleep_for(50ms);
 		Rfid_changeMode(StartContinousMode, ch1_commandCode);
 		std::this_thread::sleep_for(std::chrono::milliseconds(timeout));
 		Rfid_changeMode(StopContinousMode, ch1_commandCode);
 		std::this_thread::sleep_for(50ms);
-		Rfid_readTag(1);
+		Rfid_readEPC(1);
 		return 0;
 		break;
 	default:
@@ -201,7 +219,7 @@ int RfidTben::Rfid_scanTag(int channel, int timeout) {
 	}
 }
 
-int RfidTben::Rfid_readTag(int channel) {
+int RfidTben::Rfid_readEPC(int channel) {
 	int loopCount = 0;
 	int byteRead = 0;
 	int rc = 0;
@@ -210,6 +228,7 @@ int RfidTben::Rfid_readTag(int channel) {
 	case 0:
 		Rfid_readByteAvailable(ch0_byteAvailable);
 		std::this_thread::sleep_for(50ms);
+		Rfid_changeEpcLength(0, ch0_EPClength); //read all tags
 		while (wByteAvailable > 128) {
 			printf("While: loopCount:%d  wByteAvailable: %d\n", loopCount,wByteAvailable);
 			Rfid_changeByteLength(128, ch0_length);
@@ -318,7 +337,7 @@ string RfidTben::wordToByteString(uint16_t wordSrc) {
 	return str;
 }
 
-int RfidTben::Rfid_parseTagDetected(int channel) {
+int RfidTben::Rfid_parseEPCDetected(int channel) {
 	//assume rfid is a 12byte hex number.\
 	//every rfid will readout will consist of the 16byte in total
 	//byte 1: Data size
@@ -339,11 +358,96 @@ int RfidTben::Rfid_parseTagDetected(int channel) {
 		for (int j = 0; j < (EXPECTED_EPC_LENGTH/2); j++) {
 			int index = (EXPECTED_BYTE_LENGTH/2)*i + 1 + j ;
 			str+=wordToAscii(awRFID_input[index]);
+			awEPC[i][j] = awRFID_input[index];
+			
 		}
-		asRFID[i] = str;
-		std::cout << "i: " << i << " string: " << asRFID[i] << std::endl;
+		asRFIDname[i] = str;
+		std::cout << "i: " << i << " string: " << asRFIDname[i] << std::endl;
 	}
 	return 0;
+}
+
+
+uint32_t RfidTben::Rfid_readData(int channel, int rfidIndex, int epcbyteLen) {
+	uint32_t result;
+	switch (channel) {
+	case 0: 
+		Rfid_changeMemoryArea(userArea, ch0_memoryArea);
+		std::this_thread::sleep_for(50ms);
+		memcpy(awRFID_output, awEPC[rfidIndex], epcbyteLen); //copy EPC of target tag
+		Rfid_changeEpcLength(epcbyteLen, ch0_EPClength); //length of target epc
+		std::this_thread::sleep_for(50ms);
+		Rfid_changeOutputData(epcbyteLen/2, ch0_outputData);
+		std::this_thread::sleep_for(50ms);
+		Rfid_changeByteLength((uint16_t)4, ch0_length);//read doubleword
+		std::this_thread::sleep_for(50ms);
+		Rfid_changeStartAddr((uint16_t)0, ch0_startAddr);
+		std::this_thread::sleep_for(50ms);
+		Rfid_changeMode(Read, ch0_commandCode);
+		std::this_thread::sleep_for(50ms);
+		Rfid_readTagInput(2, ch0_inputTag, 0);
+		std::this_thread::sleep_for(50ms);
+		memcpy(&result, awRFID_input, 4);
+		return result;
+	case 1: 
+		Rfid_changeMemoryArea(userArea, ch1_memoryArea);
+		std::this_thread::sleep_for(50ms);
+		memcpy(awRFID_output, awEPC[rfidIndex], epcbyteLen); //copy EPC of target tag
+		Rfid_changeEpcLength(epcbyteLen, ch1_EPClength); //length of target epc
+		std::this_thread::sleep_for(50ms);
+		Rfid_changeOutputData(epcbyteLen / 2, ch1_outputData);
+		std::this_thread::sleep_for(50ms);
+		Rfid_changeByteLength((uint16_t)4, ch1_length);//read doubleword
+		std::this_thread::sleep_for(50ms);
+		Rfid_changeStartAddr((uint16_t)0, ch1_startAddr);
+		std::this_thread::sleep_for(50ms);
+		Rfid_changeMode(Read, ch1_commandCode);
+		std::this_thread::sleep_for(50ms);
+		Rfid_readTagInput(2, ch1_inputTag, 0);
+		std::this_thread::sleep_for(50ms);
+		memcpy(&result, awRFID_input, 4);
+		return result;
+		break;
+	default:
+		return -1;
+	}
+}
+
+int RfidTben::Rfid_WriteData(int channel, int rfidIndex, int epcbyteLen, uint32_t writeByteData) {
+	switch (channel) {
+	case 0:
+		Rfid_changeMemoryArea(userArea, ch0_memoryArea);
+		std::this_thread::sleep_for(50ms);
+		memcpy(awRFID_output, awEPC[rfidIndex], epcbyteLen); //copy EPC of target tag
+		Rfid_changeEpcLength(epcbyteLen, ch0_EPClength); //length of target epc
+		memcpy(awRFID_output + (epcbyteLen / 2), &writeByteData, 4); //insert data after EPC
+		Rfid_changeOutputData((epcbyteLen + 4) / 2, ch0_outputData);
+		std::this_thread::sleep_for(50ms);
+		Rfid_changeByteLength((uint16_t)4, ch0_length);//write doubleword
+		std::this_thread::sleep_for(50ms);
+		Rfid_changeStartAddr((uint16_t)0, ch0_startAddr);
+		std::this_thread::sleep_for(50ms);
+		Rfid_changeMode(Write, ch0_commandCode);
+		std::this_thread::sleep_for(50ms);
+		break;
+	case 1:
+		Rfid_changeMemoryArea(userArea, ch1_memoryArea);
+		std::this_thread::sleep_for(50ms);
+		memcpy(awRFID_output, awEPC[rfidIndex], epcbyteLen); //copy EPC of target tag
+		Rfid_changeEpcLength(epcbyteLen, ch1_EPClength); //length of target epc
+		memcpy(awRFID_output + (epcbyteLen / 2), &writeByteData, 4); //insert data after EPC
+		Rfid_changeOutputData((epcbyteLen + 4) / 2, ch1_outputData);
+		std::this_thread::sleep_for(50ms);
+		Rfid_changeByteLength((uint16_t)4, ch1_length);//write doubleword
+		std::this_thread::sleep_for(50ms);
+		Rfid_changeStartAddr((uint16_t)0, ch1_startAddr);
+		std::this_thread::sleep_for(50ms);
+		Rfid_changeMode(Write, ch1_commandCode);
+		std::this_thread::sleep_for(50ms);
+		break;
+	}
+	return 0;
+
 }
 
 void RfidTben::disconnectModbus() {
@@ -357,4 +461,65 @@ RfidTben::~RfidTben() {
 	modbus_close(modbusHandler);
 	modbus_free(modbusHandler);
 	printf("Closing modbus connection\n");
+}
+
+//test function with hardcoding
+int RfidTben::Rfid_changeEPCLength(int testmode) {
+	int stop;
+	//uint8_t input[14] = { 1,2,3,4,5,6,7,8,9,0,1,2,3,4 };
+	uint16_t dinput[7] = { 57,56,55,54,53,52,51 };
+	uint16_t input[7] = { 51,52,53,54,55,56,57 };
+	
+	Rfid_changeMemoryArea(EPC, ch0_memoryArea);
+	std::this_thread::sleep_for(50ms);
+	Rfid_changeMode(Idle, ch0_commandCode);
+	std::this_thread::sleep_for(50ms);
+	Rfid_changeStartAddr((uint16_t)0, ch0_startAddr); //readheadaddress?
+	std::this_thread::sleep_for(50ms);
+	switch (testmode) {
+
+	case 0: //epclength 6 to 7
+		Rfid_changeByteLength((uint16_t)14, ch0_length); //new epclength
+		std::this_thread::sleep_for(50ms);
+		//copy old epc
+		memcpy(awRFID_output, awRFID_input + 1, 12); 
+		Rfid_changeEpcLength(12, ch0_EPClength); //length of target epc
+		//copy new epc
+		memcpy(awRFID_output + 6, input, 14);
+		Rfid_changeOutputData((6 + 7), ch0_outputData);
+		std::this_thread::sleep_for(50ms);
+		printf("awRFID_output: %d  %d %d %d %d %d\n ",
+			awRFID_output[0], awRFID_output[1], awRFID_output[2], awRFID_output[3],
+			awRFID_output[4], awRFID_output[5]);
+		printf("awRFID_output 2: %d  %d %d %d %d %d %d %d\nPlease enter a NUMBER to continue: ",
+			awRFID_output[6], awRFID_output[7], awRFID_output[8], awRFID_output[9],
+			awRFID_output[10], awRFID_output[11], awRFID_output[12], awRFID_output[13]);
+		scanf("%d", &stop);
+		Rfid_changeMode(ChangeEPCLength, ch0_commandCode);
+		std::this_thread::sleep_for(50ms);
+		break;
+	case 1: //epclength 7 to 6
+		Rfid_changeByteLength((uint16_t)12, ch0_length);//new epclength
+		std::this_thread::sleep_for(50ms);
+		//copy old epc
+		memcpy(awRFID_output, awRFID_input + 1, 14); 
+		Rfid_changeEpcLength(12, ch1_EPClength); //length of target epc
+		//copy new epc
+		memcpy(awRFID_output + 7, input, 12); 
+		Rfid_changeOutputData((6 + 7), ch0_outputData);
+		std::this_thread::sleep_for(50ms);
+		printf("awRFID_output: %d  %d %d %d %d %d\n ",
+			awRFID_output[0], awRFID_output[1], awRFID_output[2], awRFID_output[3],
+			awRFID_output[4], awRFID_output[5]);
+		printf("awRFID_output 2: %d  %d %d %d %d %d %d %d\nPlease enter a NUMBER to continue: ",
+			awRFID_output[6], awRFID_output[7], awRFID_output[8], awRFID_output[9],
+			awRFID_output[10], awRFID_output[11], awRFID_output[12], awRFID_output[13]);
+		scanf("%d", &stop);
+		Rfid_changeMode(ChangeEPCLength, ch0_commandCode);
+		std::this_thread::sleep_for(50ms);
+		break;
+	default:
+		break;
+	}
+	return 0;
 }

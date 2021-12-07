@@ -58,8 +58,9 @@ int main()
 			int option = display_options();
 			int loopCount = 0;
 			char input2 = '0';
+			uint32_t input3;
 			uint8_t epcChange[16] = { 0x4c,0x51,0x31,0x34,0x78,0x31,0x34,0x4f,
-								0x4e,0x4c,0x30,0x30,0x30,0x30,0x30,0x32};
+								0x4e,0x4c,0x30,0x30,0x30,0x30,0x30,0x33};
 			uint16_t * intptr = mock2.awRFID_input;
 			switch (option) {
 				case 1:
@@ -81,12 +82,12 @@ int main()
 					mock2.Rfid_changeMode(RfidTben::StopContinousMode, chX_commandCode);
 					break;
 				case 3:
-					mock2.Rfid_readTag(ch);
-					mock2.Rfid_parseTagDetected(ch);
+					mock2.Rfid_readEPC(ch);
+					mock2.Rfid_parseEPCDetected(ch);
 					std::cout << "\n";
 					break;
 				case 4:
-					mock2.Rfid_changeEPCLength(&mock2.awRFID_input[1], &epcChange[0], 6, 8, 0);
+					mock2.Rfid_changeEPCLength(&mock2.awRFID_input[1], &epcChange[0], 8, 8, 0);
 					break;
 				case 5:
 					printf("awRFID_input: %d  %d %d %d %d %d %d %d %d %d\n",
@@ -94,9 +95,15 @@ int main()
 						intptr[4], intptr[5], intptr[6], intptr[7],
 						intptr[8], intptr[9]);
 					break;
+				case 6:
+						printf("Data: %ld\n",mock2.Rfid_readData(0, 0, 16));
+					printf("Data read\n");
+					break;
 				case 7:
-					mock2.Rfid_scanTag(ch, 3000);
-					mock2.Rfid_parseTagDetected(ch);
+					std::cout << "Enter a number to add to memory...\n";
+					std::cin >> input3;
+					mock2.Rfid_WriteData(ch, 0, EXPECTED_EPC_LENGTH, input3);
+					printf("Data written\n");
 					break;
 				case 8:
 					mock2.Rfid_changeMode(RfidTben::Reset, chX_commandCode);
@@ -117,8 +124,10 @@ int display_options() {
 	std::cout << "1: idle\n";
 	std::cout << "2: scan with continuous mode\n";
 	std::cout << "3: read and parse tags\n";
-	std::cout << "4: print awRFID_input\n";
-	std::cout << "7: scan for 3 seconds and parse\n";
+	std::cout << "4: change preset EPC\n";
+	std::cout << "5: print awRFID_input\n";
+	std::cout << "6: read Userdata\n";
+	std::cout << "7: write Userdata\n";
 	std::cout << "8: reset\n";
 	std::cout << "9: END PROGRAM\n";
 	std::cout << "Please choose your options....>   ";

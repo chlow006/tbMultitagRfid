@@ -1,2 +1,144 @@
-﻿  RfidModbusProject1.cpp
+﻿  modbus-data.c
+c:\users\changhong.low\source\repos\rfidmodbusproject1\rfidmodbusproject1\libmodbus\modbus-data.c(76): warning C4273: 'modbus_set_bits_from_byte': inconsistent dll linkage
+  c:\users\changhong.low\source\repos\rfidmodbusproject1\rfidmodbusproject1\libmodbus\modbus.h(276): note: see previous definition of 'modbus_set_bits_from_byte'
+c:\users\changhong.low\source\repos\rfidmodbusproject1\rfidmodbusproject1\libmodbus\modbus-data.c(88): warning C4273: 'modbus_set_bits_from_bytes': inconsistent dll linkage
+  c:\users\changhong.low\source\repos\rfidmodbusproject1\rfidmodbusproject1\libmodbus\modbus.h(277): note: see previous definition of 'modbus_set_bits_from_bytes'
+c:\users\changhong.low\source\repos\rfidmodbusproject1\rfidmodbusproject1\libmodbus\modbus-data.c(104): warning C4273: 'modbus_get_byte_from_bits': inconsistent dll linkage
+  c:\users\changhong.low\source\repos\rfidmodbusproject1\rfidmodbusproject1\libmodbus\modbus.h(279): note: see previous definition of 'modbus_get_byte_from_bits'
+c:\users\changhong.low\source\repos\rfidmodbusproject1\rfidmodbusproject1\libmodbus\modbus-data.c(123): warning C4273: 'modbus_get_float_abcd': inconsistent dll linkage
+  c:\users\changhong.low\source\repos\rfidmodbusproject1\rfidmodbusproject1\libmodbus\modbus.h(281): note: see previous definition of 'modbus_get_float_abcd'
+c:\users\changhong.low\source\repos\rfidmodbusproject1\rfidmodbusproject1\libmodbus\modbus-data.c(135): warning C4273: 'modbus_get_float_dcba': inconsistent dll linkage
+  c:\users\changhong.low\source\repos\rfidmodbusproject1\rfidmodbusproject1\libmodbus\modbus.h(282): note: see previous definition of 'modbus_get_float_dcba'
+c:\users\changhong.low\source\repos\rfidmodbusproject1\rfidmodbusproject1\libmodbus\modbus-data.c(147): warning C4273: 'modbus_get_float_badc': inconsistent dll linkage
+  c:\users\changhong.low\source\repos\rfidmodbusproject1\rfidmodbusproject1\libmodbus\modbus.h(283): note: see previous definition of 'modbus_get_float_badc'
+c:\users\changhong.low\source\repos\rfidmodbusproject1\rfidmodbusproject1\libmodbus\modbus-data.c(159): warning C4273: 'modbus_get_float_cdab': inconsistent dll linkage
+  c:\users\changhong.low\source\repos\rfidmodbusproject1\rfidmodbusproject1\libmodbus\modbus.h(284): note: see previous definition of 'modbus_get_float_cdab'
+c:\users\changhong.low\source\repos\rfidmodbusproject1\rfidmodbusproject1\libmodbus\modbus-data.c(171): warning C4273: 'modbus_get_float': inconsistent dll linkage
+  c:\users\changhong.low\source\repos\rfidmodbusproject1\rfidmodbusproject1\libmodbus\modbus.h(280): note: see previous definition of 'modbus_get_float'
+c:\users\changhong.low\source\repos\rfidmodbusproject1\rfidmodbusproject1\libmodbus\modbus-data.c(183): warning C4273: 'modbus_set_float_abcd': inconsistent dll linkage
+  c:\users\changhong.low\source\repos\rfidmodbusproject1\rfidmodbusproject1\libmodbus\modbus.h(287): note: see previous definition of 'modbus_set_float_abcd'
+c:\users\changhong.low\source\repos\rfidmodbusproject1\rfidmodbusproject1\libmodbus\modbus-data.c(194): warning C4273: 'modbus_set_float_dcba': inconsistent dll linkage
+  c:\users\changhong.low\source\repos\rfidmodbusproject1\rfidmodbusproject1\libmodbus\modbus.h(288): note: see previous definition of 'modbus_set_float_dcba'
+c:\users\changhong.low\source\repos\rfidmodbusproject1\rfidmodbusproject1\libmodbus\modbus-data.c(205): warning C4273: 'modbus_set_float_badc': inconsistent dll linkage
+  c:\users\changhong.low\source\repos\rfidmodbusproject1\rfidmodbusproject1\libmodbus\modbus.h(289): note: see previous definition of 'modbus_set_float_badc'
+c:\users\changhong.low\source\repos\rfidmodbusproject1\rfidmodbusproject1\libmodbus\modbus-data.c(216): warning C4273: 'modbus_set_float_cdab': inconsistent dll linkage
+  c:\users\changhong.low\source\repos\rfidmodbusproject1\rfidmodbusproject1\libmodbus\modbus.h(290): note: see previous definition of 'modbus_set_float_cdab'
+c:\users\changhong.low\source\repos\rfidmodbusproject1\rfidmodbusproject1\libmodbus\modbus-data.c(227): warning C4273: 'modbus_set_float': inconsistent dll linkage
+  c:\users\changhong.low\source\repos\rfidmodbusproject1\rfidmodbusproject1\libmodbus\modbus.h(286): note: see previous definition of 'modbus_set_float'
+  modbus-rtu.c
+c:\users\changhong.low\source\repos\rfidmodbusproject1\rfidmodbusproject1\libmodbus\modbus-rtu.c(905): warning C4273: 'modbus_rtu_set_serial_mode': inconsistent dll linkage
+  c:\users\changhong.low\source\repos\rfidmodbusproject1\rfidmodbusproject1\libmodbus\modbus-rtu.h(25): note: see previous definition of 'modbus_rtu_set_serial_mode'
+c:\users\changhong.low\source\repos\rfidmodbusproject1\rfidmodbusproject1\libmodbus\modbus-rtu.c(959): warning C4273: 'modbus_rtu_get_serial_mode': inconsistent dll linkage
+  c:\users\changhong.low\source\repos\rfidmodbusproject1\rfidmodbusproject1\libmodbus\modbus-rtu.h(26): note: see previous definition of 'modbus_rtu_get_serial_mode'
+c:\users\changhong.low\source\repos\rfidmodbusproject1\rfidmodbusproject1\libmodbus\modbus-rtu.c(983): warning C4273: 'modbus_rtu_get_rts': inconsistent dll linkage
+  c:\users\changhong.low\source\repos\rfidmodbusproject1\rfidmodbusproject1\libmodbus\modbus-rtu.h(33): note: see previous definition of 'modbus_rtu_get_rts'
+c:\users\changhong.low\source\repos\rfidmodbusproject1\rfidmodbusproject1\libmodbus\modbus-rtu.c(1007): warning C4273: 'modbus_rtu_set_rts': inconsistent dll linkage
+  c:\users\changhong.low\source\repos\rfidmodbusproject1\rfidmodbusproject1\libmodbus\modbus-rtu.h(32): note: see previous definition of 'modbus_rtu_set_rts'
+c:\users\changhong.low\source\repos\rfidmodbusproject1\rfidmodbusproject1\libmodbus\modbus-rtu.c(1043): warning C4273: 'modbus_rtu_set_custom_rts': inconsistent dll linkage
+  c:\users\changhong.low\source\repos\rfidmodbusproject1\rfidmodbusproject1\libmodbus\modbus-rtu.h(35): note: see previous definition of 'modbus_rtu_set_custom_rts'
+c:\users\changhong.low\source\repos\rfidmodbusproject1\rfidmodbusproject1\libmodbus\modbus-rtu.c(1068): warning C4273: 'modbus_rtu_get_rts_delay': inconsistent dll linkage
+  c:\users\changhong.low\source\repos\rfidmodbusproject1\rfidmodbusproject1\libmodbus\modbus-rtu.h(38): note: see previous definition of 'modbus_rtu_get_rts_delay'
+c:\users\changhong.low\source\repos\rfidmodbusproject1\rfidmodbusproject1\libmodbus\modbus-rtu.c(1093): warning C4273: 'modbus_rtu_set_rts_delay': inconsistent dll linkage
+  c:\users\changhong.low\source\repos\rfidmodbusproject1\rfidmodbusproject1\libmodbus\modbus-rtu.h(37): note: see previous definition of 'modbus_rtu_set_rts_delay'
+c:\users\changhong.low\source\repos\rfidmodbusproject1\rfidmodbusproject1\libmodbus\modbus-rtu.c(1227): warning C4273: 'modbus_new_rtu': inconsistent dll linkage
+  c:\users\changhong.low\source\repos\rfidmodbusproject1\rfidmodbusproject1\libmodbus\modbus-rtu.h(19): note: see previous definition of 'modbus_new_rtu'
+  modbus-tcp.c
+c:\users\changhong.low\source\repos\rfidmodbusproject1\rfidmodbusproject1\libmodbus\modbus-tcp.c(384): warning C4477: 'fprintf' : format string '%s' requires an argument of type 'char *', but variadic argument 1 has type 'WCHAR *'
+  c:\users\changhong.low\source\repos\rfidmodbusproject1\rfidmodbusproject1\libmodbus\modbus-tcp.c(384): note: consider using '%ls' in the format string
+  c:\users\changhong.low\source\repos\rfidmodbusproject1\rfidmodbusproject1\libmodbus\modbus-tcp.c(384): note: consider using '%lls' in the format string
+  c:\users\changhong.low\source\repos\rfidmodbusproject1\rfidmodbusproject1\libmodbus\modbus-tcp.c(384): note: consider using '%Ls' in the format string
+  c:\users\changhong.low\source\repos\rfidmodbusproject1\rfidmodbusproject1\libmodbus\modbus-tcp.c(384): note: consider using '%ws' in the format string
+c:\users\changhong.low\source\repos\rfidmodbusproject1\rfidmodbusproject1\libmodbus\modbus-tcp.c(481): warning C4273: 'modbus_tcp_listen': inconsistent dll linkage
+  c:\users\changhong.low\source\repos\rfidmodbusproject1\rfidmodbusproject1\libmodbus\modbus-tcp.h(43): note: see previous definition of 'modbus_tcp_listen'
+c:\users\changhong.low\source\repos\rfidmodbusproject1\rfidmodbusproject1\libmodbus\modbus-tcp.c(544): warning C4273: 'modbus_tcp_pi_listen': inconsistent dll linkage
+  c:\users\changhong.low\source\repos\rfidmodbusproject1\rfidmodbusproject1\libmodbus\modbus-tcp.h(47): note: see previous definition of 'modbus_tcp_pi_listen'
+c:\users\changhong.low\source\repos\rfidmodbusproject1\rfidmodbusproject1\libmodbus\modbus-tcp.c(595): warning C4477: 'fprintf' : format string '%s' requires an argument of type 'char *', but variadic argument 1 has type 'WCHAR *'
+  c:\users\changhong.low\source\repos\rfidmodbusproject1\rfidmodbusproject1\libmodbus\modbus-tcp.c(595): note: consider using '%ls' in the format string
+  c:\users\changhong.low\source\repos\rfidmodbusproject1\rfidmodbusproject1\libmodbus\modbus-tcp.c(595): note: consider using '%lls' in the format string
+  c:\users\changhong.low\source\repos\rfidmodbusproject1\rfidmodbusproject1\libmodbus\modbus-tcp.c(595): note: consider using '%Ls' in the format string
+  c:\users\changhong.low\source\repos\rfidmodbusproject1\rfidmodbusproject1\libmodbus\modbus-tcp.c(595): note: consider using '%ws' in the format string
+c:\users\changhong.low\source\repos\rfidmodbusproject1\rfidmodbusproject1\libmodbus\modbus-tcp.c(660): warning C4273: 'modbus_tcp_accept': inconsistent dll linkage
+  c:\users\changhong.low\source\repos\rfidmodbusproject1\rfidmodbusproject1\libmodbus\modbus-tcp.h(44): note: see previous definition of 'modbus_tcp_accept'
+c:\users\changhong.low\source\repos\rfidmodbusproject1\rfidmodbusproject1\libmodbus\modbus-tcp.c(690): warning C4273: 'modbus_tcp_pi_accept': inconsistent dll linkage
+  c:\users\changhong.low\source\repos\rfidmodbusproject1\rfidmodbusproject1\libmodbus\modbus-tcp.h(48): note: see previous definition of 'modbus_tcp_pi_accept'
+c:\users\changhong.low\source\repos\rfidmodbusproject1\rfidmodbusproject1\libmodbus\modbus-tcp.c(793): warning C4273: 'modbus_new_tcp': inconsistent dll linkage
+  c:\users\changhong.low\source\repos\rfidmodbusproject1\rfidmodbusproject1\libmodbus\modbus-tcp.h(42): note: see previous definition of 'modbus_new_tcp'
+c:\users\changhong.low\source\repos\rfidmodbusproject1\rfidmodbusproject1\libmodbus\modbus-tcp.c(858): warning C4273: 'modbus_new_tcp_pi': inconsistent dll linkage
+  c:\users\changhong.low\source\repos\rfidmodbusproject1\rfidmodbusproject1\libmodbus\modbus-tcp.h(46): note: see previous definition of 'modbus_new_tcp_pi'
+  modbus.c
+c:\users\changhong.low\source\repos\rfidmodbusproject1\rfidmodbusproject1\libmodbus\modbus.c(44): warning C4273: 'modbus_strerror': inconsistent dll linkage
+  c:\users\changhong.low\source\repos\rfidmodbusproject1\rfidmodbusproject1\libmodbus\modbus.h(204): note: see previous definition of 'modbus_strerror'
+c:\users\changhong.low\source\repos\rfidmodbusproject1\rfidmodbusproject1\libmodbus\modbus.c(112): warning C4273: 'modbus_flush': inconsistent dll linkage
+  c:\users\changhong.low\source\repos\rfidmodbusproject1\rfidmodbusproject1\libmodbus\modbus.h(201): note: see previous definition of 'modbus_flush'
+c:\users\changhong.low\source\repos\rfidmodbusproject1\rfidmodbusproject1\libmodbus\modbus.c(211): warning C4273: 'modbus_send_raw_request': inconsistent dll linkage
+  c:\users\changhong.low\source\repos\rfidmodbusproject1\rfidmodbusproject1\libmodbus\modbus.h(230): note: see previous definition of 'modbus_send_raw_request'
+c:\users\changhong.low\source\repos\rfidmodbusproject1\rfidmodbusproject1\libmodbus\modbus.c(484): warning C4273: 'modbus_receive': inconsistent dll linkage
+  c:\users\changhong.low\source\repos\rfidmodbusproject1\rfidmodbusproject1\libmodbus\modbus.h(232): note: see previous definition of 'modbus_receive'
+c:\users\changhong.low\source\repos\rfidmodbusproject1\rfidmodbusproject1\libmodbus\modbus.c(502): warning C4273: 'modbus_receive_confirmation': inconsistent dll linkage
+  c:\users\changhong.low\source\repos\rfidmodbusproject1\rfidmodbusproject1\libmodbus\modbus.h(234): note: see previous definition of 'modbus_receive_confirmation'
+c:\users\changhong.low\source\repos\rfidmodbusproject1\rfidmodbusproject1\libmodbus\modbus.c(707): warning C4273: 'modbus_reply': inconsistent dll linkage
+  c:\users\changhong.low\source\repos\rfidmodbusproject1\rfidmodbusproject1\libmodbus\modbus.h(236): note: see previous definition of 'modbus_reply'
+c:\users\changhong.low\source\repos\rfidmodbusproject1\rfidmodbusproject1\libmodbus\modbus.c(1007): warning C4273: 'modbus_reply_exception': inconsistent dll linkage
+  c:\users\changhong.low\source\repos\rfidmodbusproject1\rfidmodbusproject1\libmodbus\modbus.h(238): note: see previous definition of 'modbus_reply_exception'
+c:\users\changhong.low\source\repos\rfidmodbusproject1\rfidmodbusproject1\libmodbus\modbus.c(1087): warning C4273: 'modbus_read_bits': inconsistent dll linkage
+  c:\users\changhong.low\source\repos\rfidmodbusproject1\rfidmodbusproject1\libmodbus\modbus.h(206): note: see previous definition of 'modbus_read_bits'
+c:\users\changhong.low\source\repos\rfidmodbusproject1\rfidmodbusproject1\libmodbus\modbus.c(1116): warning C4273: 'modbus_read_input_bits': inconsistent dll linkage
+  c:\users\changhong.low\source\repos\rfidmodbusproject1\rfidmodbusproject1\libmodbus\modbus.h(207): note: see previous definition of 'modbus_read_input_bits'
+c:\users\changhong.low\source\repos\rfidmodbusproject1\rfidmodbusproject1\libmodbus\modbus.c(1191): warning C4273: 'modbus_read_registers': inconsistent dll linkage
+  c:\users\changhong.low\source\repos\rfidmodbusproject1\rfidmodbusproject1\libmodbus\modbus.h(208): note: see previous definition of 'modbus_read_registers'
+c:\users\changhong.low\source\repos\rfidmodbusproject1\rfidmodbusproject1\libmodbus\modbus.c(1217): warning C4273: 'modbus_read_input_registers': inconsistent dll linkage
+  c:\users\changhong.low\source\repos\rfidmodbusproject1\rfidmodbusproject1\libmodbus\modbus.h(209): note: see previous definition of 'modbus_read_input_registers'
+c:\users\changhong.low\source\repos\rfidmodbusproject1\rfidmodbusproject1\libmodbus\modbus.c(1271): warning C4273: 'modbus_write_bit': inconsistent dll linkage
+  c:\users\changhong.low\source\repos\rfidmodbusproject1\rfidmodbusproject1\libmodbus\modbus.h(210): note: see previous definition of 'modbus_write_bit'
+c:\users\changhong.low\source\repos\rfidmodbusproject1\rfidmodbusproject1\libmodbus\modbus.c(1283): warning C4273: 'modbus_write_register': inconsistent dll linkage
+  c:\users\changhong.low\source\repos\rfidmodbusproject1\rfidmodbusproject1\libmodbus\modbus.h(211): note: see previous definition of 'modbus_write_register'
+c:\users\changhong.low\source\repos\rfidmodbusproject1\rfidmodbusproject1\libmodbus\modbus.c(1294): warning C4273: 'modbus_write_bits': inconsistent dll linkage
+  c:\users\changhong.low\source\repos\rfidmodbusproject1\rfidmodbusproject1\libmodbus\modbus.h(212): note: see previous definition of 'modbus_write_bits'
+c:\users\changhong.low\source\repos\rfidmodbusproject1\rfidmodbusproject1\libmodbus\modbus.c(1357): warning C4273: 'modbus_write_registers': inconsistent dll linkage
+  c:\users\changhong.low\source\repos\rfidmodbusproject1\rfidmodbusproject1\libmodbus\modbus.h(213): note: see previous definition of 'modbus_write_registers'
+c:\users\changhong.low\source\repos\rfidmodbusproject1\rfidmodbusproject1\libmodbus\modbus.c(1405): warning C4273: 'modbus_mask_write_register': inconsistent dll linkage
+  c:\users\changhong.low\source\repos\rfidmodbusproject1\rfidmodbusproject1\libmodbus\modbus.h(214): note: see previous definition of 'modbus_mask_write_register'
+c:\users\changhong.low\source\repos\rfidmodbusproject1\rfidmodbusproject1\libmodbus\modbus.c(1448): warning C4273: 'modbus_write_and_read_registers': inconsistent dll linkage
+  c:\users\changhong.low\source\repos\rfidmodbusproject1\rfidmodbusproject1\libmodbus\modbus.h(215): note: see previous definition of 'modbus_write_and_read_registers'
+c:\users\changhong.low\source\repos\rfidmodbusproject1\rfidmodbusproject1\libmodbus\modbus.c(1522): warning C4273: 'modbus_report_slave_id': inconsistent dll linkage
+  c:\users\changhong.low\source\repos\rfidmodbusproject1\rfidmodbusproject1\libmodbus\modbus.h(218): note: see previous definition of 'modbus_report_slave_id'
+c:\users\changhong.low\source\repos\rfidmodbusproject1\rfidmodbusproject1\libmodbus\modbus.c(1585): warning C4273: 'modbus_set_slave': inconsistent dll linkage
+  c:\users\changhong.low\source\repos\rfidmodbusproject1\rfidmodbusproject1\libmodbus\modbus.h(179): note: see previous definition of 'modbus_set_slave'
+c:\users\changhong.low\source\repos\rfidmodbusproject1\rfidmodbusproject1\libmodbus\modbus.c(1595): warning C4273: 'modbus_get_slave': inconsistent dll linkage
+  c:\users\changhong.low\source\repos\rfidmodbusproject1\rfidmodbusproject1\libmodbus\modbus.h(180): note: see previous definition of 'modbus_get_slave'
+c:\users\changhong.low\source\repos\rfidmodbusproject1\rfidmodbusproject1\libmodbus\modbus.c(1606): warning C4273: 'modbus_set_error_recovery': inconsistent dll linkage
+  c:\users\changhong.low\source\repos\rfidmodbusproject1\rfidmodbusproject1\libmodbus\modbus.h(181): note: see previous definition of 'modbus_set_error_recovery'
+c:\users\changhong.low\source\repos\rfidmodbusproject1\rfidmodbusproject1\libmodbus\modbus.c(1618): warning C4273: 'modbus_set_socket': inconsistent dll linkage
+  c:\users\changhong.low\source\repos\rfidmodbusproject1\rfidmodbusproject1\libmodbus\modbus.h(182): note: see previous definition of 'modbus_set_socket'
+c:\users\changhong.low\source\repos\rfidmodbusproject1\rfidmodbusproject1\libmodbus\modbus.c(1629): warning C4273: 'modbus_get_socket': inconsistent dll linkage
+  c:\users\changhong.low\source\repos\rfidmodbusproject1\rfidmodbusproject1\libmodbus\modbus.h(183): note: see previous definition of 'modbus_get_socket'
+c:\users\changhong.low\source\repos\rfidmodbusproject1\rfidmodbusproject1\libmodbus\modbus.c(1640): warning C4273: 'modbus_get_response_timeout': inconsistent dll linkage
+  c:\users\changhong.low\source\repos\rfidmodbusproject1\rfidmodbusproject1\libmodbus\modbus.h(185): note: see previous definition of 'modbus_get_response_timeout'
+c:\users\changhong.low\source\repos\rfidmodbusproject1\rfidmodbusproject1\libmodbus\modbus.c(1652): warning C4273: 'modbus_set_response_timeout': inconsistent dll linkage
+  c:\users\changhong.low\source\repos\rfidmodbusproject1\rfidmodbusproject1\libmodbus\modbus.h(186): note: see previous definition of 'modbus_set_response_timeout'
+c:\users\changhong.low\source\repos\rfidmodbusproject1\rfidmodbusproject1\libmodbus\modbus.c(1666): warning C4273: 'modbus_get_byte_timeout': inconsistent dll linkage
+  c:\users\changhong.low\source\repos\rfidmodbusproject1\rfidmodbusproject1\libmodbus\modbus.h(188): note: see previous definition of 'modbus_get_byte_timeout'
+c:\users\changhong.low\source\repos\rfidmodbusproject1\rfidmodbusproject1\libmodbus\modbus.c(1678): warning C4273: 'modbus_set_byte_timeout': inconsistent dll linkage
+  c:\users\changhong.low\source\repos\rfidmodbusproject1\rfidmodbusproject1\libmodbus\modbus.h(189): note: see previous definition of 'modbus_set_byte_timeout'
+c:\users\changhong.low\source\repos\rfidmodbusproject1\rfidmodbusproject1\libmodbus\modbus.c(1692): warning C4273: 'modbus_get_indication_timeout': inconsistent dll linkage
+  c:\users\changhong.low\source\repos\rfidmodbusproject1\rfidmodbusproject1\libmodbus\modbus.h(191): note: see previous definition of 'modbus_get_indication_timeout'
+c:\users\changhong.low\source\repos\rfidmodbusproject1\rfidmodbusproject1\libmodbus\modbus.c(1704): warning C4273: 'modbus_set_indication_timeout': inconsistent dll linkage
+  c:\users\changhong.low\source\repos\rfidmodbusproject1\rfidmodbusproject1\libmodbus\modbus.h(192): note: see previous definition of 'modbus_set_indication_timeout'
+c:\users\changhong.low\source\repos\rfidmodbusproject1\rfidmodbusproject1\libmodbus\modbus.c(1717): warning C4273: 'modbus_get_header_length': inconsistent dll linkage
+  c:\users\changhong.low\source\repos\rfidmodbusproject1\rfidmodbusproject1\libmodbus\modbus.h(194): note: see previous definition of 'modbus_get_header_length'
+c:\users\changhong.low\source\repos\rfidmodbusproject1\rfidmodbusproject1\libmodbus\modbus.c(1727): warning C4273: 'modbus_connect': inconsistent dll linkage
+  c:\users\changhong.low\source\repos\rfidmodbusproject1\rfidmodbusproject1\libmodbus\modbus.h(196): note: see previous definition of 'modbus_connect'
+c:\users\changhong.low\source\repos\rfidmodbusproject1\rfidmodbusproject1\libmodbus\modbus.c(1737): warning C4273: 'modbus_close': inconsistent dll linkage
+  c:\users\changhong.low\source\repos\rfidmodbusproject1\rfidmodbusproject1\libmodbus\modbus.h(197): note: see previous definition of 'modbus_close'
+c:\users\changhong.low\source\repos\rfidmodbusproject1\rfidmodbusproject1\libmodbus\modbus.c(1745): warning C4273: 'modbus_free': inconsistent dll linkage
+  c:\users\changhong.low\source\repos\rfidmodbusproject1\rfidmodbusproject1\libmodbus\modbus.h(199): note: see previous definition of 'modbus_free'
+c:\users\changhong.low\source\repos\rfidmodbusproject1\rfidmodbusproject1\libmodbus\modbus.c(1753): warning C4273: 'modbus_set_debug': inconsistent dll linkage
+  c:\users\changhong.low\source\repos\rfidmodbusproject1\rfidmodbusproject1\libmodbus\modbus.h(202): note: see previous definition of 'modbus_set_debug'
+c:\users\changhong.low\source\repos\rfidmodbusproject1\rfidmodbusproject1\libmodbus\modbus.c(1774): warning C4273: 'modbus_mapping_new_start_address': inconsistent dll linkage
+  c:\users\changhong.low\source\repos\rfidmodbusproject1\rfidmodbusproject1\libmodbus\modbus.h(220): note: see previous definition of 'modbus_mapping_new_start_address'
+c:\users\changhong.low\source\repos\rfidmodbusproject1\rfidmodbusproject1\libmodbus\modbus.c(1855): warning C4273: 'modbus_mapping_new': inconsistent dll linkage
+  c:\users\changhong.low\source\repos\rfidmodbusproject1\rfidmodbusproject1\libmodbus\modbus.h(226): note: see previous definition of 'modbus_mapping_new'
+c:\users\changhong.low\source\repos\rfidmodbusproject1\rfidmodbusproject1\libmodbus\modbus.c(1862): warning C4273: 'modbus_mapping_free': inconsistent dll linkage
+  c:\users\changhong.low\source\repos\rfidmodbusproject1\rfidmodbusproject1\libmodbus\modbus.h(228): note: see previous definition of 'modbus_mapping_free'
+  Generating Code...
   RfidModbusProject1.vcxproj -> C:\Users\changhong.low\source\repos\RfidModbusProject1\Debug\RfidModbusProject1.exe
