@@ -28,16 +28,10 @@ using std::string;
 class RfidTben
 {
 	modbus_t * modbusHandler;
-
-	uint16_t awModb_Write[7]; // 0-1:commandcode,	2-3:start address, 4-5: length , 6: CmdTimeOut//
-	uint16_t wCommandCode;
-	uint16_t wdStartAddress;
-	uint16_t wLEN;
-	uint16_t wCmdTimeOut;
 	
 public:
 
-	uint16_t awEPC[50][EXPECTED_EPC_LENGTH];
+	uint16_t awEPC[50][EXPECTED_EPC_LENGTH/2];
 	uint16_t wByteAvailable;
 	string asRFIDname[50];
 	uint16_t wTagCounter;
@@ -122,7 +116,10 @@ public:
 	
 	uint32_t Rfid_readData(int channel, int rfidIndex, int epcbyteLen);
 	int Rfid_WriteData(int channel, int rfidIndex, int epcbyteLen, uint32_t writeByteData);
-	int Rfid_scanEPC(int channel, int timeout);  //detects number of tags, stores the epc information
+	int Rfid_initAllTags(int channel, int epcbyteLen, int scanTime);
+	int Rfid_incrementAllTags(int channel, int epcbyteLen, int scanTime);
+
+	int Rfid_scanEPC(int channel, int scanTime);  //detects number of tags, stores the epc information
 	int Rfid_readEPC(int channel);  //reads buffer stores the epc information
 	
 	string convertExtendedAscii(uint8_t hex);

@@ -59,8 +59,10 @@ int main()
 			int loopCount = 0;
 			char input2 = '0';
 			uint32_t input3;
+			int input4;
+			uint32_t input5;
 			uint8_t epcChange[16] = { 0x4c,0x51,0x31,0x34,0x78,0x31,0x34,0x4f,
-								0x4e,0x4c,0x30,0x30,0x30,0x30,0x30,0x33};
+								0x4e,0x4c,0x30,0x30,0x30,0x30,0x30,0x39};
 			uint16_t * intptr = mock2.awRFID_input;
 			switch (option) {
 				case 1:
@@ -87,17 +89,16 @@ int main()
 					std::cout << "\n";
 					break;
 				case 4:
-					mock2.Rfid_changeEPCLength(&mock2.awRFID_input[1], &epcChange[0], 8, 8, 0);
+					mock2.Rfid_changeEPCLength(&mock2.awRFID_input[1], &epcChange[0], 6, 8, 0);
 					break;
 				case 5:
-					printf("awRFID_input: %d  %d %d %d %d %d %d %d %d %d\n",
-						intptr[0], intptr[1], intptr[2], intptr[3],
-						intptr[4], intptr[5], intptr[6], intptr[7],
-						intptr[8], intptr[9]);
+					mock2.Rfid_initAllTags(ch, EXPECTED_EPC_LENGTH, 2000);
 					break;
 				case 6:
-						printf("Data: %ld\n",mock2.Rfid_readData(0, 0, 16));
-					printf("Data read\n");
+					std::cout << "Enter index of the tag you want to read (0....maxNumberOfTags) ...\n";
+					std::cin >> input4;
+					input5 = mock2.Rfid_readData(ch, input4, EXPECTED_EPC_LENGTH);
+					printf("Data:%ld\n", input5);
 					break;
 				case 7:
 					std::cout << "Enter a number to add to memory...\n";
@@ -106,9 +107,12 @@ int main()
 					printf("Data written\n");
 					break;
 				case 8:
-					mock2.Rfid_changeMode(RfidTben::Reset, chX_commandCode);
+					mock2.Rfid_incrementAllTags(ch, EXPECTED_EPC_LENGTH,2000);
 					break;
 				case 9:
+					mock2.Rfid_changeMode(RfidTben::Reset, chX_commandCode);
+					break;
+				case 0:
 					std::cout << "ENDing PROGRAM.....\n";
 					return 0;
 				default:
@@ -125,11 +129,12 @@ int display_options() {
 	std::cout << "2: scan with continuous mode\n";
 	std::cout << "3: read and parse tags\n";
 	std::cout << "4: change preset EPC\n";
-	std::cout << "5: print awRFID_input\n";
+	std::cout << "5: Rfid_initAllTags\n";
 	std::cout << "6: read Userdata\n";
 	std::cout << "7: write Userdata\n";
-	std::cout << "8: reset\n";
-	std::cout << "9: END PROGRAM\n";
+	std::cout << "8: Increment all detected tags\n";
+	std::cout << "9: reset\n";
+	std::cout << "0: END PROGRAM\n";
 	std::cout << "Please choose your options....>   ";
 	do
 	{
@@ -138,7 +143,7 @@ int display_options() {
 			std::cin.clear();//Clear the error
 			std::cin.ignore(); //discard input
 		}
-	} while (input < 1 || input>9);
+	} while (input < 0 || input>9);
 
 	return (int)input;
 }

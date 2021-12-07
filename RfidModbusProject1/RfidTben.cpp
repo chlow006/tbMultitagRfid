@@ -110,7 +110,6 @@ int RfidTben::Rfid_changeEPCLength(uint16_t * oldepc, uint8_t * newepc, int old_
 		std::this_thread::sleep_for(50ms);
 		Rfid_changeMode(ChangeEPCLength, ch0_commandCode);
 		std::this_thread::sleep_for(50ms);
-		printf("Please close and rerun the program before scanning for tags again\n");
 		return 0;
 	case 1:
 		Rfid_changeMode(Idle, ch1_commandCode);
@@ -131,7 +130,6 @@ int RfidTben::Rfid_changeEPCLength(uint16_t * oldepc, uint8_t * newepc, int old_
 		std::this_thread::sleep_for(50ms);
 		Rfid_changeMode(ChangeEPCLength, ch1_commandCode);
 		std::this_thread::sleep_for(50ms);
-		printf("Please close and rerun the program before scanning for tags again\n");
 		return 0;
 	default:
 		return -1;
@@ -168,7 +166,8 @@ uint16_t RfidTben::Rfid_readByteAvailable(ModbusAddress MBaddr) {
 	return wByteAvailable;
 }
 
-int RfidTben::Rfid_scanEPC(int channel, int timeout) {
+
+int RfidTben::Rfid_scanEPC(int channel, int scanTime) {
 	//Flow chart: Continuous mode without interruption before reading data (TBEN-S2-2RFID-4DXP Manual page 270)
 	//step 1: Set group address to detect unique IDs(Leaving it at zero will cause hardware to keep polling old tags)
 	//step 2: Set length 
@@ -190,7 +189,7 @@ int RfidTben::Rfid_scanEPC(int channel, int timeout) {
 		Rfid_changeByteLength((uint16_t)16, ch0_length); //set to positive value
 		std::this_thread::sleep_for(50ms);
 		Rfid_changeMode(StartContinousMode, ch0_commandCode);
-		std::this_thread::sleep_for(std::chrono::milliseconds(timeout));
+		std::this_thread::sleep_for(std::chrono::milliseconds(scanTime));
 		Rfid_changeMode(StopContinousMode, ch0_commandCode);
 		std::this_thread::sleep_for(50ms);
 		Rfid_readEPC(0);
@@ -206,7 +205,7 @@ int RfidTben::Rfid_scanEPC(int channel, int timeout) {
 		Rfid_changeByteLength((uint16_t)16, ch1_length);//set to positive value
 		std::this_thread::sleep_for(50ms);
 		Rfid_changeMode(StartContinousMode, ch1_commandCode);
-		std::this_thread::sleep_for(std::chrono::milliseconds(timeout));
+		std::this_thread::sleep_for(std::chrono::milliseconds(scanTime));
 		Rfid_changeMode(StopContinousMode, ch1_commandCode);
 		std::this_thread::sleep_for(50ms);
 		Rfid_readEPC(1);
@@ -369,7 +368,16 @@ int RfidTben::Rfid_parseEPCDetected(int channel) {
 
 
 uint32_t RfidTben::Rfid_readData(int channel, int rfidIndex, int epcbyteLen) {
+	//step 0: Set Idle intermediate state (Changing to a different state is required for successive read)
+	//step 1: Set memory area to change
+	//step 2: Define EPC of target tag in "process output data"
+	//step 3: change 'Length of UID/EPC' to EPC length of targetted RFID tag
+	//step 4: Create 'Length' to length of data to read and starting address of 'input buffer'
+	//step 5: Send command
+	//step 6: Read 'inpput process buffer' for response
 	uint32_t result;
+	Rfid_changeMode(Idle, ch0_commandCode); 
+	std::this_thread::sleep_for(20ms);
 	switch (channel) {
 	case 0: 
 		Rfid_changeMemoryArea(userArea, ch0_memoryArea);
@@ -414,6 +422,14 @@ uint32_t RfidTben::Rfid_readData(int channel, int rfidIndex, int epcbyteLen) {
 }
 
 int RfidTben::Rfid_WriteData(int channel, int rfidIndex, int epcbyteLen, uint32_t writeByteData) {
+	//step 0: Set Idle intermediate state (Changing to a different state is required for successive read)
+	//step 1: Set memory area to change
+	//step 2: Define EPC of target tag, followed by data to be written, into "process output data"
+	//step 3: change 'Length of UID/EPC' to EPC length of targetted RFID tag
+	//step 4: Create 'Length' to length of data to write and starting address of 'input buffer'
+	//step 5: Send command
+	Rfid_changeMode(Idle, ch0_commandCode);
+	std::this_thread::sleep_for(20ms);
 	switch (channel) {
 	case 0:
 		Rfid_changeMemoryArea(userArea, ch0_memoryArea);
@@ -448,6 +464,30 @@ int RfidTben::Rfid_WriteData(int channel, int rfidIndex, int epcbyteLen, uint32_
 	}
 	return 0;
 
+}
+
+int RfidTben::Rfid_initAllTags(int channel, int epcbyteLen, int scanTime) {
+	uint32_t currentValue;
+	Rfid_scanEPC(channel, scanTime);
+	Rfid_parseEPCDetected(channel);
+	for (int i = 0; i < wTagCounter; i++) {
+		Rfid_WriteData(channel, i, EXPECTED_EPC_LENGTH, 0);
+		currentValue = Rfid_readData(channel, i, EXPECTED_EPC_LENGTH);
+		printf("TagID%d: %ld\n", i, currentValue);
+	}
+	return 0;
+}
+
+int RfidTben::Rfid_incrementAllTags(int channel, int epcbyteLen, int scanTime) {
+	uint32_t previousValue;
+	Rfid_scanEPC(channel, scanTime);
+	Rfid_parseEPCDetected(channel);
+	for (int i = 0; i < wTagCounter; i++) {
+		previousValue = Rfid_readData(channel, i, EXPECTED_EPC_LENGTH);
+		Rfid_WriteData(channel, i, EXPECTED_EPC_LENGTH, previousValue + 1);
+		printf("TagID%d: %ld -> %ld\n", i, previousValue, previousValue + 1);
+	}
+	return 0;
 }
 
 void RfidTben::disconnectModbus() {
