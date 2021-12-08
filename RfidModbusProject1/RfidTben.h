@@ -95,8 +95,8 @@ public:
 		ch1_EPClength = 0x851,
 		ch1_outputData = 0x0858,
 
-		ch1_responseCode = 0x46,
-		ch1_statusCode = 0x48,
+		ch1_responseCode = 0x4c,
+		ch1_statusCode = 0x4E,
 		ch1_errorCode = 0x50,
 		ch1_tagCounter = 0x51,
 		ch1_byteAvailable = 0x52,
