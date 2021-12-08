@@ -157,6 +157,44 @@ int RfidTben::Rfid_readTagCounter(ModbusAddress MBaddr) {
 	return wTagCounter;
 }
 
+uint16_t RfidTben::Rfid_readResponseCode(ModbusAddress MBaddr) {
+	uint16_t responseCode;
+	int resc = modbus_read_registers(modbusHandler, MBaddr, 1, &responseCode);
+	if (resc == -1) {
+		fprintf(stderr, "responseCode read failed: %s\n", modbus_strerror(errno));
+		return -1;
+	}
+	xEC_Error = (responseCode & 0x4000) >> 14;
+	xEC_Busy = (responseCode & 0x8000) >> 15;
+	return responseCode;
+}
+
+uint16_t RfidTben::Rfid_readStatusCode(ModbusAddress MBaddr) {
+	uint16_t statusCode;
+	int resc = modbus_read_registers(modbusHandler, MBaddr, 1, &statusCode);
+	if (resc == -1) {
+		fprintf(stderr, "responseCode read failed: %s\n", modbus_strerror(errno));
+		return -1;
+	}
+	xTagPresent = (statusCode & 0x1);
+	xAntennaDetune = (statusCode & 0x10) >> 4;
+	xParNoSupported = (statusCode & 0x20) >> 5;
+	xError = (statusCode & 0x40) >> 6;
+	xNotConnected = (statusCode & 0x80) >> 7;
+	xRWHeadSwitchON = (statusCode & 0x100) >> 8;
+	xContinuousModeActive = (statusCode & 0x200) >> 9;
+	return statusCode;
+}
+
+uint16_t RfidTben::Rfid_readErrorCode(ModbusAddress MBaddr) {
+	int ec = modbus_read_registers(modbusHandler, MBaddr, 1, &wErrorCode);
+	if (ec == -1) {
+		fprintf(stderr, "error code read failed: %s\n", modbus_strerror(errno));
+		return -1;
+	}
+	return wErrorCode;
+}
+
 uint16_t RfidTben::Rfid_readByteAvailable(ModbusAddress MBaddr) {
 	int tc = modbus_read_registers(modbusHandler, MBaddr, 1, &wByteAvailable);
 	if (tc == -1) {
@@ -241,7 +279,7 @@ int RfidTben::Rfid_readEPC(int channel) {
 			loopCount++;
 			byteRead += 128;
 		}
-		rc=Rfid_changeByteLength(wByteAvailable, ch0_length);
+		rc = Rfid_changeByteLength(wByteAvailable, ch0_length);
 		printf("rc=%d loopCount:%d  wByteAvailable: %d\n", rc, loopCount, wByteAvailable);
 		std::this_thread::sleep_for(100ms);
 		Rfid_changeMode(GetData, ch0_commandCode);

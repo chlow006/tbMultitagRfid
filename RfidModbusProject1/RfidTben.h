@@ -28,13 +28,22 @@ using std::string;
 class RfidTben
 {
 	modbus_t * modbusHandler;
-	
+	bool xEC_Error; //true if error occurred
+	bool xEC_Busy; //true if still executing command
+	bool xTagPresent; //true if tag present at read/write head
+	bool xRWHeadSwitchON; //true if read/write head switched on
+	bool xContinuousModeActive; //true if continuous mode active
+	bool xAntennaDetune;//true if read/write head detuned
+	bool xParNoSupported;//true if parameter not supported by read/write head
+	bool xError;//true if error message of the read/write head
+	bool xNotConnected;//true if 
 public:
 
 	uint16_t awEPC[50][EXPECTED_EPC_LENGTH/2];
 	uint16_t wByteAvailable;
 	string asRFIDname[50];
 	uint16_t wTagCounter;
+	uint16_t wErrorCode;
 	uint16_t awRFID_input[300];
 	uint16_t awRFID_output[30];
 	typedef enum  {
@@ -69,6 +78,9 @@ public:
 		ch0_EPClength = 0x805,
 		ch0_outputData = 0x80c,
 
+		ch0_responseCode = 0x00,
+		ch0_statusCode = 0x02,
+		ch0_errorCode = 0x04,
 		ch0_tagCounter = 0x05,
 		ch0_byteAvailable = 0x06,
 		ch0_readFrag = 0x07,
@@ -83,6 +95,9 @@ public:
 		ch1_EPClength = 0x851,
 		ch1_outputData = 0x0858,
 
+		ch1_responseCode = 0x46,
+		ch1_statusCode = 0x48,
+		ch1_errorCode = 0x50,
 		ch1_tagCounter = 0x51,
 		ch1_byteAvailable = 0x52,
 		ch1_readFrag = 0x53,
@@ -111,6 +126,9 @@ public:
 	int Rfid_changeEPCLength(uint16_t * oldepc, uint8_t * newepc, int old_wordLen, uint16_t new_wordLen, int channel);
 	int Rfid_readTagInput(uint16_t wordLen, ModbusAddress MBaddr, int iteration);
 	int Rfid_readTagCounter(ModbusAddress MBaddr);
+	uint16_t Rfid_readStatusCode(ModbusAddress MBaddr);
+	uint16_t Rfid_readResponseCode(ModbusAddress MBaddr);
+	uint16_t Rfid_readErrorCode(ModbusAddress MBaddr);
 	uint16_t Rfid_readByteAvailable(ModbusAddress MBaddr);
 	
 	
